@@ -1,8 +1,7 @@
 within Modelica_LinearSystems2.Math;
 operator record Polynomial "Record defining the data for a polynomial"
-  extends Modelica.Icons.Record;
-  Real c[:] "Polynomial coefficients (c[1]*x^n + ... c[n]*x + c[n+1])"
-    annotation (Dialog);
+
+  Real c[:] "Polynomial coefficients (c[1]*x^n + ... c[n]*x + c[n+1])" annotation (Dialog);
 
   encapsulated package Examples
     "Package of examples to demonstrate the usage of polynomials"
@@ -116,7 +115,6 @@ operator record Polynomial "Record defining the data for a polynomial"
 
   encapsulated operator 'constructor'
     "Collection of operators to construct a Polynomial data record"
-    extends Modelica.Icons.Package;
     import Modelica;
 
     function fromVector
@@ -153,7 +151,7 @@ operator record Polynomial "Record defining the data for a polynomial"
 
     protected
       Integer nr=size(roots, 1) "Number of roots";
-      Integer nc=nr + 1 "Length of coefficent vector";
+      Integer nc=nr + 1 "Length of coefficient vector";
       Integer nn;
       Integer i;
     algorithm
@@ -231,7 +229,6 @@ with j=sqrt(-1), is defined as
   encapsulated operator '-'
     "Collection of operators for subtraction of polynomials"
     import Modelica;
-    extends Modelica.Icons.Package;
 
     encapsulated function negate "Unary minus (multiply polynomial by -1)"
 
@@ -860,7 +857,7 @@ a vector of Complex elements.
   end evaluate_der;
 
   encapsulated function integralValue_der
-    "Evaluate derivative of integral of polynomial p(x) from x_low to x_high, assuming only x_high as time-dependent (Leibnitz rule)"
+    "Evaluate derivative of integral of polynomial p(x) from x_low to x_high, assuming only x_high as time-dependent (Leibniz rule)"
     import Modelica_LinearSystems2.Math.Polynomial;
 
     input Polynomial p "Polynomial";

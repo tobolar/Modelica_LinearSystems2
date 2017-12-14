@@ -1,7 +1,6 @@
 within Modelica_LinearSystems2;
 operator record DiscreteZerosAndPoles
   "Discrete zeros and poles description of a single input, single output system (data + operations)"
-  extends Modelica.Icons.Record;
 
   Real k=1.0 "Multiplicative factor of transfer function"
       annotation(Dialog(group="y = k*(product(p+n1[i]) * product(p^2+n2[i,1]*p+n2[i,2])) / (product(p+d1[i])*product(p^2+d2[i,1]*p+d2[i,2])) *u"));
@@ -31,7 +30,6 @@ operator record DiscreteZerosAndPoles
     "Collection of operators to construct a DiscreteZerosAndPoles data record"
     import Modelica_LinearSystems2;
     import Modelica;
-    extends Modelica.Icons.Package;
 
     encapsulated function fromReal
       "Generate a DiscreteZerosAndPoles data record from a real value"
@@ -316,7 +314,7 @@ dzp = 'constructor'.<b>fromFactorization</b>(n1, n2, d1, d2, k, Ts, method, uNam
 
 <h4>Description</h4>
 <p>
-This function constructs a DiscreteZerosAndPoles transfer function from the real first and scond order polynomials of the numerator and the denominator, repectively.
+This function constructs a DiscreteZerosAndPoles transfer function from the real first and scond order polynomials of the numerator and the denominator, respectively.
 </p>
 
 <h4>Example</h4>
@@ -344,9 +342,9 @@ which is equal to
   end 'constructor';
 
 encapsulated operator '-'
-    "Contains operators for subtraction of discrete zeros and poles descriptions"
-    import Modelica;
-  extends Modelica.Icons.Package;
+  "Contains operators for subtraction of discrete zeros and poles descriptions"
+  import Modelica;
+
   function subtract "Subtract two DiscreteZerosAndPoles (dzp1 - dzp2)"
     import Modelica;
     import Complex;
@@ -438,9 +436,9 @@ encapsulated operator '-'
 end '-';
 
 encapsulated operator '*'
-    "Contains operators for multiplication of discrete zeros and poles records"
-    import Modelica;
-  extends Modelica.Icons.Package;
+  "Contains operators for multiplication of discrete zeros and poles records"
+  import Modelica;
+
 function 'dzp*dzp'
       "Multiply two DiscreteZerosAndPoles transfer functions (dzp1 * dzp2)"
 
