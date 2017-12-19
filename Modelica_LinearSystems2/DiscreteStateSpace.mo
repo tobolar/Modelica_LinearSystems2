@@ -573,18 +573,30 @@ public
 </pre></blockquote>
 </html>"));
     end fromMatrices2;
+    annotation (Icon(graphics={
+          Rectangle(
+            lineColor={200,200,200},
+            fillColor={248,248,248},
+            fillPattern=FillPattern.HorizontalCylinder,
+            extent={{-100,-100},{100,100}},
+            radius=25.0),
+          Rectangle(
+            lineColor={128,128,128},
+            fillPattern=FillPattern.None,
+            extent={{-100,-100},{100,100}},
+            radius=25.0)}));
   end 'constructor';
 
   encapsulated operator '-'
     "Contains operators for subtraction of discrete state space systems"
     import Modelica;
-  
+
     function subtract
         "Subtraction of two state space systems connected in parallel (= inputs are the same, outputs of the two systems are subtracted)"
-  
+
         import Modelica;
         import Modelica_LinearSystems2.DiscreteStateSpace;
-  
+
       input DiscreteStateSpace dss1 "State space system 1";
       input DiscreteStateSpace dss2
           "State Space system 2 is subtracted from system 1";
@@ -595,7 +607,7 @@ public
         redeclare Real D[size(dss1.D, 1),size(dss1.D, 2)],
         redeclare Real B2[size(dss1.B2, 1) + size(dss2.B2, 1),size(dss1.B2, 2)])
           "= dss1 - dss2";
-      protected
+    protected
       Integer nx1=size(dss1.A, 1);
       Integer nx2=size(dss2.A, 1);
     algorithm
@@ -647,12 +659,12 @@ dss3 := dss1 - dss2;
 </pre></blockquote>
 </html>"));
     end subtract;
-  
+
     function negate
         "Unary minus (discrete state space system where the output is multiplied by a gain of -1)"
         import Modelica;
         import Modelica_LinearSystems2.DiscreteStateSpace;
-  
+
       input DiscreteStateSpace dss;
       output DiscreteStateSpace result(
         redeclare Real A[size(dss.A, 1),size(dss.A, 2)],
@@ -667,13 +679,28 @@ dss3 := dss1 - dss2;
       result.D := -dss.D;
       result.Ts := dss.Ts;
       result.method := dss.method;
-  
+
     end negate;
       annotation (Documentation(info="<html>
 <p>
 This package contains operators for subtraction of discrete state space records.
 </p>
-</html>"));
+</html>"), Icon(graphics={
+          Rectangle(
+            lineColor={200,200,200},
+            fillColor={248,248,248},
+            fillPattern=FillPattern.HorizontalCylinder,
+            extent={{-100,-100},{100,100}},
+            radius=25.0),
+          Line(
+            points={{-50,0},{50,0}},
+            color={0,0,0},
+            smooth=Smooth.None),
+          Rectangle(
+            lineColor={128,128,128},
+            fillPattern=FillPattern.None,
+            extent={{-100,-100},{100,100}},
+            radius=25.0)}));
   end '-';
 
 encapsulated operator function '+'
@@ -1252,7 +1279,7 @@ encapsulated package Analysis
   extends Modelica.Icons.Package;
 
   encapsulated function eigenValues
-      "Calculate the eigenvalues of a linear discrete state space system and write them in a complex vector"
+    "Calculate the eigenvalues of a linear discrete state space system and write them in a complex vector"
 
     import Modelica;
     import Complex;
@@ -1260,8 +1287,8 @@ encapsulated package Analysis
     import Modelica_LinearSystems2.DiscreteStateSpace;
 
     input DiscreteStateSpace dss "Discrete state space system";
-    output Complex eigvalues[size(dss.A, 1)]=
-      Modelica_LinearSystems2.Math.Complex.eigenValues(dss.A)
+    output Complex eigvalues[size(dss.A, 1)] =
+      Modelica_LinearSystems2.Math.ComplexAdvanced.eigenValues(dss.A)
       "Eigenvalues of the system";
   algorithm
 
@@ -2144,7 +2171,7 @@ end Analysis;
     end for;
 
     S := dss.A - dss.B*K;
-    po := Modelica_LinearSystems2.Math.Complex.eigenValues(S);
+    po :=Modelica_LinearSystems2.Math.ComplexAdvanced.eigenValues(S);
 
     if calculateEigenvectors then
   //     X := fill(Complex(0), n, n);
@@ -2160,7 +2187,7 @@ end Analysis;
   //       end for;
   //     end for;
   //      Modelica_LinearSystems2.Math.Complex.Matrices.print(X,6,"X1");
-      X := Modelica_LinearSystems2.Math.Complex.eigenVectors(S);
+      X :=Modelica_LinearSystems2.Math.ComplexAdvanced.eigenVectors(S);
   //      Modelica_LinearSystems2.Math.Complex.Matrices.print(X,6,"X2");
 
     end if;
@@ -2290,11 +2317,11 @@ encapsulated package Plot
     import Modelica;
   extends Modelica.Icons.Package;
 encapsulated function bodeSISO
-      "Plot bode plot of the corresponding discrete transfer function"
-      import Modelica;
-      import Modelica_LinearSystems2;
-      import Modelica_LinearSystems2.DiscreteStateSpace;
-      import Modelica_LinearSystems2.DiscreteZerosAndPoles;
+  "Plot bode plot of the corresponding discrete transfer function"
+  import Modelica;
+  import Modelica_LinearSystems2;
+  import Modelica_LinearSystems2.DiscreteStateSpace;
+  import Modelica_LinearSystems2.DiscreteZerosAndPoles;
 
   input DiscreteStateSpace dss "discrete state space system";
   input Integer iu=1 "index of input";
@@ -2940,7 +2967,8 @@ end Plot;
       if Modelica.Math.Vectors.length(ssm.B[:, 1]) > 0 and
           Modelica.Math.Vectors.length(ssm.C[1, :]) > 0 then
 
-        poles := Modelica_LinearSystems2.Math.Complex.Internal.eigenValues_dhseqr(ssm.A);//ssm.A is of upper Hessenberg form
+        poles :=Modelica_LinearSystems2.Math.ComplexAdvanced.Internal.eigenValues_dhseqr(ssm.A);
+          //ssm.A is of upper Hessenberg form
         zeros := StateSpace.Internal.invariantZeros2(ssm);
         cpoles := fill(Complex(0),size(poles,1));
         czeros := fill(Complex(0),size(zeros,1));
@@ -3608,7 +3636,7 @@ ss.B2  = [0.000437113227802044;
       input Modelica_LinearSystems2.DiscreteStateSpace dss;
       output Real tSpan "Time span";
     protected
-      Modelica_LinearSystems2.Math.Complex eig[size(dss.A, 1)];
+      Complex eig[size(dss.A, 1)];
       Real realp[size(dss.A, 1)];
       Real sorted[size(dss.A, 1)];
       Real indices[size(dss.A, 1)];
@@ -3872,7 +3900,7 @@ Note that the system input <b>u</b> must be sampled with the discrete system sam
         Modelica.Utilities.Streams.print("\n A subsystem (F, G) in DiscreteStateSpace.Internal.assignOneOrTwoPoles() is not controllable, since G is equal to zero matrix. Therefore, K is set to zero matrix and the eigenvalues are retained.\n
       That is, "   + String(F[1, 1]) + " remains and " + String(gamma[1].re) + " cannot be realized");
       else
-        system_ev := Modelica_LinearSystems2.Math.Complex.eigenValues(F);
+        system_ev :=Modelica_LinearSystems2.Math.ComplexAdvanced.eigenValues(F);
         Modelica.Utilities.Streams.print("\n A subsystem (F, G) in DiscreteStateSpace.Internal.assignOneOrTwoPoles() is not controllable, since G is equal to zero matrix. Therefore, K is set to zero matrix and the eigenvalues are retained.\n
       That is, "   + String(system_ev[1].re) + (if abs(system_ev[1].im) > 0 then " + " else
                 " - ") + String(system_ev[1].im) + "j and " + String(system_ev[2].re)
@@ -3889,4 +3917,17 @@ Note that the system input <b>u</b> must be sampled with the discrete system sam
   end assignOneOrTwoPoles;
   end Internal;
 
+  annotation (
+    Icon(
+      graphics={
+        Rectangle(
+          lineColor={160,160,164},
+          fillColor={160,160,164},
+          fillPattern=FillPattern.Solid,
+          extent={{-100,-100},{100,100}},
+          radius=25),
+        Text(
+          lineColor={255,255,170},
+          extent={{-90,-50},{90,50}},
+          textString="ss")}));
 end DiscreteStateSpace;
