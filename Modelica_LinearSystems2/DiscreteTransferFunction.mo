@@ -617,7 +617,8 @@ The outputs y and x are calculated from the system equations of the discrete sta
             response=Modelica_LinearSystems2.Utilities.Types.TimeResponse.Impulse,
             x0=zeros(DiscreteTransferFunction.Analysis.denominatorDegree(dtf)));
 
-    annotation(__Dymola_interactive=true, Documentation(info="<html>
+      annotation (
+        Documentation(info="<html>
 <h4>Syntax</h4>
 <blockquote><pre>
 (y, t, x) = DiscreteTransferFunction.Analysis.<b>impulseResponse</b>(dtf, tSpan, x0)
@@ -683,7 +684,8 @@ The outputs y and x of the discrete state space systrem are calculated for each 
             response=Modelica_LinearSystems2.Utilities.Types.TimeResponse.Step,
             x0=zeros(DiscreteTransferFunction.Analysis.denominatorDegree(dtf)));
 
-      annotation (__Dymola_interactive=true, Documentation(info="<html>
+      annotation (
+        Documentation(info="<html>
 <h4>Syntax</h4>
 <blockquote><pre>
 (y, t, x) = DiscreteTransferFunction.Analysis.<b>stepResponse</b>(dtf, tSpan, x0)
@@ -750,7 +752,8 @@ The outputs y and x of the discrete state space systrem are calculated for each 
             response=Modelica_LinearSystems2.Utilities.Types.TimeResponse.Ramp,
             x0=zeros(DiscreteTransferFunction.Analysis.denominatorDegree(dtf)));
 
-      annotation (__Dymola_interactive=true, Documentation(info="<html>
+      annotation (
+        Documentation(info="<html>
 <h4>Syntax</h4>
 <blockquote><pre>
 (y, t, x) = DiscreteTransferFunction.Analysis.<b>rampResponse</b>(dtf, tSpan, x0)
@@ -819,7 +822,8 @@ The outputs y and x of the discrete state space systrem are calculated for each 
             response=Modelica_LinearSystems2.Utilities.Types.TimeResponse.Initial,
             x0=x0);
 
-    annotation(__Dymola_interactive=true, Documentation(info="<html>
+      annotation (
+        Documentation(info="<html>
  <h4>Syntax</h4>
 <blockquote><pre>
 (y, t, x) = DiscreteTransferFunction.Analysis.<b>initialResponse</b>(x0, dtf, tSpan)
@@ -1049,7 +1053,7 @@ Function Analysis.<b>denominatorDegree</b> calculates the degree of the denomina
         Plot.diagram(diagram2[1], device);
       end if;
 
-      annotation (__Dymola_interactive=true, Documentation(info="<html>
+      annotation (Documentation(info="<html>
 </html>"));
     end bode;
 
@@ -1112,7 +1116,9 @@ Function Analysis.<b>denominatorDegree</b> calculates the degree of the denomina
       diagram2.curve := {curve};
 
       Plot.diagram(diagram2, device);
-      annotation (__Dymola_interactive=true, Documentation(info="<html>
+
+      annotation (
+        Documentation(info="<html>
 </html>"));
     end timeResponse;
 
@@ -1146,7 +1152,8 @@ Function Analysis.<b>denominatorDegree</b> calculates the degree of the denomina
           defaultDiagram=defaultDiagram,
           device=device);
 
-      annotation (__Dymola_interactive=true, Documentation(info="<html>
+      annotation (
+        Documentation(info="<html>
 </html>"));
     end impulse;
 
@@ -1180,9 +1187,8 @@ Function Analysis.<b>denominatorDegree</b> calculates the degree of the denomina
         defaultDiagram=defaultDiagram,
         device=device);
 
-    equation
-
-      annotation (__Dymola_interactive=true, Documentation(info="<html>
+      annotation (
+        Documentation(info="<html>
 </html>"));
     end step;
 
@@ -1216,7 +1222,8 @@ Function Analysis.<b>denominatorDegree</b> calculates the degree of the denomina
         defaultDiagram=defaultDiagram,
         device=device);
 
-      annotation (__Dymola_interactive=true, Documentation(info="<html>
+      annotation (
+        Documentation(info="<html>
 </html>"));
     end ramp;
 
@@ -1256,7 +1263,8 @@ Function Analysis.<b>denominatorDegree</b> calculates the degree of the denomina
             defaultDiagram=defaultDiagram,
             device=device);
 
-      annotation (__Dymola_interactive=true, Documentation(info="<html>
+      annotation (
+        Documentation(info="<html>
 </html>"));
     end initialResponse;
 
@@ -1496,10 +1504,11 @@ with
     import Modelica_LinearSystems2.StateSpace;
     import Modelica_LinearSystems2.DiscreteStateSpace;
     import Modelica_LinearSystems2.DiscreteTransferFunction;
+    import Simulator = DymolaCommands.SimulatorAPI;
 
     input String modelName "Name of the Modelica model"  annotation(Dialog(__Dymola_translatedModel(translate=true)));
     input Real T_linearize = 0
-        "point in time of simulation to linearize the model";
+        "Point in time of simulation to linearize the model";
     input String fileName = "dslin" "Name of the result file";
     input Modelica.SIunits.Time Ts = 1 "Sample time";
     input Modelica_LinearSystems2.Utilities.Types.Method method=
@@ -1507,9 +1516,9 @@ with
 
     protected
     String fileName2 = fileName + ".mat";
-    Boolean OK1 = simulateModel(problem=modelName, startTime=0, stopTime=T_linearize);
-    Boolean OK2 = importInitial("dsfinal.txt");
-    Boolean OK3 = linearizeModel(problem=modelName, resultFile=fileName, startTime=T_linearize, stopTime=T_linearize + 1);
+    Boolean OK1 = Simulator.simulateModel(problem=modelName, startTime=0, stopTime=T_linearize);
+    Boolean OK2 = Simulator.importInitial("dsfinal.txt");
+    Boolean OK3 = Simulator.linearizeModel(problem=modelName, resultFile=fileName, startTime=T_linearize, stopTime=T_linearize + 1);
     Integer xuy[3] = Modelica_LinearSystems2.Internal.Streams.ReadSystemDimension(fileName2, "ABCD");
     Integer nx = xuy[1];
     Integer nu = xuy[2];
@@ -1564,7 +1573,8 @@ with
     //     end for;
     //   end for;
 
-  annotation (__Dymola_interactive=true, Documentation(info="<html>
+    annotation (
+      Documentation(info="<html>
 </html>"));
   end fromModel;
 

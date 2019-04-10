@@ -47,7 +47,8 @@ algorithm
       xLabel="time [s]",
       yLabel="y1, y2"));
 
-  annotation (Documentation(info="<html>
+  annotation (
+    Documentation(info="<html>
 <p>
 Computes the time response of the system
 <p/>
@@ -67,5 +68,5 @@ dss = DiscreteStateSpace(
 sampled at <i>Ts=0.01</i> with inititial state <i>x0=[0;0]</i>
 subject to the system input <i>u = ones(300,2)</i> (which results with Ts=0.01 in 3 sec).
 </p>
-</html>"), __Dymola_interactive=true);
+</html>"));
 end analysisTimeResponse;

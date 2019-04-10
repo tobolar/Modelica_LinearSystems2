@@ -1,5 +1,6 @@
 within Modelica_LinearSystems2.WorkInProgress.TestExamples;
 function testExamplesWorkInProgress "Test all examples from package WorkInProgress"
+  import DymolaCommands.SimulatorAPI.simulateModel;
 
 algorithm
   simulateModel("Modelica_LinearSystems2.WorkInProgress.Controller.Examples.TestComponents");
@@ -19,4 +20,6 @@ algorithm
   simulateModel("Modelica_LinearSystems2.WorkInProgress.Tests.Examples.SimpleStateSpaceSystem");
 
   Modelica.Utilities.Streams.print("testExamplesWorkInProgress done!");
+  annotation (
+    __Dymola_interactive=true);
 end testExamplesWorkInProgress;

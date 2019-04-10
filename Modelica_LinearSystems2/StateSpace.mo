@@ -2478,7 +2478,8 @@ ss;
         print("</table>\n", fileName);
       end printTab4;
 
-      annotation (__Dymola_interactive=true, Documentation(info="<html>
+      annotation (
+        Documentation(info="<html>
 <h4>Syntax</h4>
 <blockquote><pre>
 Modelica_LinearSystems2.StateSpace.Analysis.<b>analysis</b>(ss);
@@ -2924,7 +2925,8 @@ starting at x(t=0)=x0 and y(t=0)=C*x0 + D*u0, the outputs y and x are calculated
             response=Modelica_LinearSystems2.Utilities.Types.TimeResponse.Impulse,
             x0=zeros(size(sc.A, 1)));
 
-      annotation (__Dymola_interactive=true,Documentation(info="<html>
+      annotation (
+        Documentation(info="<html>
 <h4>Syntax</h4>
 <blockquote><pre>
 (y, t, x) = StateSpace.Analysis.<b>impulseResponse</b>(ss, dt, tSpan)
@@ -3002,7 +3004,8 @@ StateSpace.Analysis.timeResponse(ss, dt, tSpan, response=Types.TimeResponse.Impu
             response=Modelica_LinearSystems2.Utilities.Types.TimeResponse.Step,
             x0=zeros(size(sc.A, 1)));
 
-      annotation (__Dymola_interactive=true,Documentation(info="<html>
+      annotation (
+        Documentation(info="<html>
 <h4>Syntax</h4>
 <blockquote><pre>
 (y, t, x) = StateSpace.Analysis.<b>stepResponse</b>(ss, dt, tSpan)
@@ -3081,7 +3084,8 @@ StateSpace.Analysis.timeResponse(ss, dt, tSpan, response=Types.TimeResponse.Step
             response=Modelica_LinearSystems2.Utilities.Types.TimeResponse.Ramp,
             x0=zeros(size(sc.A, 1)));
 
-      annotation (__Dymola_interactive=true,Documentation(info="<html>
+      annotation (
+        Documentation(info="<html>
 <h4>Syntax</h4>
 <blockquote><pre>
 (y, t, x) = StateSpace.Analysis.<b>rampResponse</b>(ss, dt, tSpan)
@@ -3164,7 +3168,8 @@ StateSpace.Analysis.timeResponse(ss, dt, tSpan, response=Types.TimeResponse.Ramp
             response=Modelica_LinearSystems2.Utilities.Types.TimeResponse.Initial,
             x0=x0);
 
-      annotation (__Dymola_interactive=true,Documentation(info="<html>
+      annotation (
+        Documentation(info="<html>
 <h4>Syntax</h4>
 <blockquote><pre>
 (y, t, x) = StateSpace.Analysis.<b>initialResponse</b>(ss, dt, tSpan, x0)
@@ -3509,7 +3514,7 @@ This function calculates the zeros, poles and gain of the corresponding transfer
       import Modelica_LinearSystems2.StateSpace;
 
       input StateSpace ss "State space system";
-      output Complex eigvalues[size(ss.A, 1)] =
+      output Complex eigvalues[size(ss.A, 1)]=
         Modelica_LinearSystems2.Math.ComplexAdvanced.eigenValues(ss.A)
         "Eigen values of the system";
     algorithm
@@ -5948,7 +5953,8 @@ der(<b>x</b>) = <b>A</b>*<b>x</b> + <b>B</b>*<b>u</b>;
         print("</table>\n", fileName);
       end printTab4;
 
-      annotation (__Dymola_interactive=true, Documentation(info="<html>
+      annotation (
+        Documentation(info="<html>
 <h4>Syntax</h4>
 <blockquote><pre>
 Modelica_LinearSystems2.StateSpace.Analysis.<b>analysis</b>(ss);
@@ -7520,7 +7526,8 @@ Finally, the output sslqg represents the estimated system with <b>y</b>(t), the 
         end if;
       end if;
 
-      annotation (__Dymola_interactive=true, Documentation(info="<html>
+      annotation (
+        Documentation(info="<html>
 <h4>Syntax</h4>
 <blockquote><pre>
 StateSpace.Plot.<b>polesAndZeros</b>(ss);
@@ -7693,7 +7700,8 @@ and results in
             Modelica.Utilities.Files.fullPathName(fileName) + "\"");
         end if;
       end if;
-      annotation (__Dymola_interactive=true, Documentation(info="<html>
+      annotation (
+        Documentation(info="<html>
 <h4>Syntax</h4>
 <blockquote><pre>
 StateSpace.Plot.<b>bodeSISO</b>(ss)
@@ -7881,7 +7889,8 @@ vector <b>u</b> to the iy'th element of the output vector <b>y</b>.
           Modelica.Utilities.Files.fullPathName(fileName) + "\"");
       end if;
 
-      annotation (__Dymola_interactive=true, Documentation(info="<html>
+      annotation (
+        Documentation(info="<html>
 <h4>Syntax</h4>
 <blockquote><pre>
 StateSpace.Plot.<b>bodeMIMO</b>(ss)
@@ -8017,7 +8026,8 @@ StateSpace.Plot.<b>bodeMIMO</b>(
         end if;
       end for;
 
-      annotation (__Dymola_interactive=true, Documentation(info="<html>
+      annotation (
+        Documentation(info="<html>
 <h4>Syntax</h4>
 <blockquote><pre>
 StateSpace.Plot.<b>timeResponse</b>(ss);
@@ -8101,7 +8111,8 @@ This function plots the time response of a state space system. The character of 
             defaultDiagram=defaultDiagram,
             device=device);
 
-      annotation (__Dymola_interactive=true, Documentation(info="<html>
+      annotation (
+        Documentation(info="<html>
 <h4>Syntax</h4>
 <blockquote><pre>
 StateSpace.Plot.<b>impulse</b>(ss);
@@ -8182,7 +8193,8 @@ for each system corresponding to the transition matrix. It is based on <a href=\
             defaultDiagram=defaultDiagram,
             device=device);
 
-      annotation (__Dymola_interactive=true, Documentation(info="<html>
+      annotation (
+        Documentation(info="<html>
 <h4>Syntax</h4>
 <blockquote><pre>
 StateSpace.Plot.<b>step</b>(ss);
@@ -8261,7 +8273,8 @@ This function plots the step responses of a state space system for each system c
             defaultDiagram=defaultDiagram,
             device=device);
 
-      annotation (__Dymola_interactive=true, Documentation(info="<html>
+      annotation (
+        Documentation(info="<html>
 <h4>Syntax</h4>
 <blockquote><pre>
 StateSpace.Plot.<b>ramp</b>(ss);
@@ -8339,7 +8352,8 @@ This function plots the ramp responses of a state space system for each system c
             defaultDiagram=defaultDiagram,
             device=device);
 
-      annotation (__Dymola_interactive=true, Documentation(info="<html>
+      annotation (
+        Documentation(info="<html>
 <h4>Syntax</h4>
 <blockquote><pre>
 StateSpace.Plot.<b>initial</b>(ss);
@@ -9690,6 +9704,7 @@ Reads and loads a state space system from a mat-file <tt>fileName</tt>. The file
       import Modelica;
       import Modelica.Utilities.Streams;
       import Modelica_LinearSystems2.StateSpace;
+      import Simulator = DymolaCommands.SimulatorAPI;
 
       input String modelName "Name of the model"
        annotation(Dialog(__Dymola_translatedModel(translate=true)));
@@ -9701,13 +9716,13 @@ Reads and loads a state space system from a mat-file <tt>fileName</tt>. The file
     protected
       String fileName2 = fileName + ".mat"
         "Name of the result file with extension";
-      Boolean OK1 = simulateModel(
+      Boolean OK1 = Simulator.simulateModel(
               problem=modelName,
               startTime=0,
               stopTime=T_linearize,
               method=method);
-      Boolean OK2 = importInitial("dsfinal.txt");
-      Boolean OK3 = linearizeModel(
+      Boolean OK2 = Simulator.importInitial("dsfinal.txt");
+      Boolean OK3 = Simulator.linearizeModel(
               problem=modelName,
               resultFile=fileName,
               startTime=T_linearize,
@@ -9720,7 +9735,8 @@ Reads and loads a state space system from a mat-file <tt>fileName</tt>. The file
 
     algorithm
 
-      annotation (__Dymola_interactive=true, Documentation(info="<html>
+      annotation (
+        Documentation(info="<html>
 <h4>Syntax</h4>
 <blockquote><pre>
 ss = StateSpace.Import.<b>fromModel</b>(modelName, T_linearize, fileName)
@@ -12688,7 +12704,8 @@ k = ---------- * ----------------------
       result.yNames := xuyName[nx + nu + 1:nx + nu + ny];
       result.xNames := xuyName[1:nx];
 
-      annotation (__Dymola_interactive=true, Documentation(info="<html>
+      annotation (
+        Documentation(info="<html>
 <h4>Syntax</h4>
 <blockquote><pre>
 ss = StateSpace.Import.<b>fromModel</b>(modelName, T_linearize, fileName)
@@ -12837,7 +12854,8 @@ ss = StateSpace.Import.<b>fromModel</b>(modelName, T_linearize, fileName)
          end if;
       end if;
 
-      annotation (__Dymola_interactive=true, Documentation(info="<html>
+      annotation (
+        Documentation(info="<html>
 <h4>Syntax</h4>
 <blockquote><pre>
 StateSpace.Plot.<b>polesAndZeros</b>(ss);
@@ -12990,7 +13008,8 @@ and results in
             defaultDiagram=defaultDiagram,
             device=device);
 
-      annotation (__Dymola_interactive=true, Documentation(info="<html>
+      annotation (
+        Documentation(info="<html>
 <h4>Syntax</h4>
 <blockquote><pre>
 StateSpace.Plot.<b>bodeSISO</b>(ss)
@@ -13127,7 +13146,8 @@ vector <b>u</b> to the iy'th element of the output vector <b>y</b>.
         end for;
       end for;
 
-      annotation (__Dymola_interactive=true, Documentation(info="<html>
+      annotation (
+        Documentation(info="<html>
 <h4>Syntax</h4>
 <blockquote><pre>
 StateSpace.Plot.<b>bodeMIMO</b>(ss)

@@ -983,7 +983,8 @@ Starting at x(t=0)=x0 and y(t=0)=C*x0 + D*u0, the outputs y and x are calculated
           response=Modelica_LinearSystems2.Utilities.Types.TimeResponse.Impulse,
           x0=zeros(DiscreteZerosAndPoles.Analysis.denominatorDegree(dzp)));
 
-      annotation (__Dymola_interactive=true, Documentation(info="<html>
+    annotation (
+      Documentation(info="<html>
 <h4>Syntax</h4>
 <blockquote><pre>
 (y, t, x)=DiscreteZerosAndPoles.Analysis.<b>impulseResponse</b>(dzp, tSpan, x0)
@@ -1061,7 +1062,8 @@ DiscreteZerosAndPoles.Analysis.timeResponse(dzp, tSpan, response=Types.TimeRespo
           response=Modelica_LinearSystems2.Utilities.Types.TimeResponse.Step,
           x0=zeros(DiscreteZerosAndPoles.Analysis.denominatorDegree(dzp)));
 
-    annotation (__Dymola_interactive=true, Documentation(info="<html>
+    annotation (
+      Documentation(info="<html>
 <h4>Syntax</h4>
 <blockquote><pre>
 (y, t, x)=DiscreteZerosAndPoles.Analysis.<b>stepResponse</b>(dzp, tSpan, x0)
@@ -1137,7 +1139,8 @@ DiscreteZerosAndPoles.Analysis.timeResponse(dzp, tSpan, response=Types.TimeRespo
           response=Modelica_LinearSystems2.Utilities.Types.TimeResponse.Ramp,
           x0=zeros(DiscreteZerosAndPoles.Analysis.denominatorDegree(dzp)));
 
-      annotation (__Dymola_interactive=true, Documentation(info="<html>
+    annotation (
+      Documentation(info="<html>
 <h4>Syntax</h4>
 <blockquote><pre>
 (y, t, x)=DiscreteZerosAndPoles.Analysis.<b>rampResponse</b>(ss, tSpan, x0)
@@ -1214,7 +1217,8 @@ DiscreteZerosAndPoles.Analysis.timeResponse(dzp, tSpan, response=Types.TimeRespo
           response=Modelica_LinearSystems2.Utilities.Types.TimeResponse.Initial,
           x0=x0);
 
-      annotation (__Dymola_interactive=true, Documentation(info="<html>
+    annotation (
+      Documentation(info="<html>
 <h4>Syntax</h4>
 <blockquote><pre>
 (y, t, x)=DiscreteZerosAndPoles.Analysis.<b>initialResponse</b>(zp, tSpan, x0)
@@ -1578,7 +1582,8 @@ numerator polynomial N(z) and the denominator polynomial D(q).
       Plot.diagram(diagram2[1], device);
     end if;
 
-    annotation (__Dymola_interactive=true, Documentation(info="<html>
+    annotation (
+      Documentation(info="<html>
 <h4>Syntax</h4>
 <blockquote><pre>
 DiscreteZerosAndPoles.Plot.<b>bode</b>(dzp)
@@ -1676,7 +1681,9 @@ This function plots the bode-diagram of a DiscreteZerosAndPoles transfer functio
     diagram2.curve := {curve};
 
     Plot.diagram(diagram2, device);
-    annotation (__Dymola_interactive=true, Documentation(info="<html>
+
+    annotation (
+      Documentation(info="<html>
 <h4>Syntax</h4>
 <blockquote><pre>
 DiscreteZerosAndPoles.Plot.<b>timeResponse</b>(dzp);
@@ -1756,7 +1763,8 @@ i.e. Impulse, Step, Ramp, or Initial.
       defaultDiagram=defaultDiagram,
       device=device);
 
-    annotation (__Dymola_interactive=true, Documentation(info="<html>
+    annotation (
+      Documentation(info="<html>
 <h4>Syntax</h4>
 <blockquote><pre>
 DiscreteZerosAndPoles.Plot.<b>impulse</b>(dzp)
@@ -1831,7 +1839,8 @@ This function plots the impulse response of a discrete zeros-and-poles transfer 
 
   equation
 
-    annotation (__Dymola_interactive=true, Documentation(info="<html>
+    annotation (
+      Documentation(info="<html>
 <h4>Syntax</h4>
 <blockquote><pre>
 DiscreteZerosAndPoles.Plot.<b>step</b>(dzp)
@@ -1905,7 +1914,8 @@ This function plots the step response of a transfer function. It is based on <a 
       defaultDiagram=defaultDiagram,
       device=device);
 
-    annotation (__Dymola_interactive=true, Documentation(info="<html>
+    annotation (
+      Documentation(info="<html>
 <blockquote><pre>
 DiscreteZerosAndPoles.Plot.<b>ramp</b>(dzp)
    or
@@ -1983,7 +1993,8 @@ This function plots the ramp response of a zeros-and-poles transfer function. It
           defaultDiagram=defaultDiagram,
           device=device);
 
-    annotation (__Dymola_interactive=true, Documentation(info="<html>
+    annotation (
+      Documentation(info="<html>
 <h4>Syntax</h4>
 <blockquote><pre>
 DiscreteZerosAndPoles.Plot.<b>initialResponse</b>(zp)
@@ -2548,6 +2559,7 @@ The variable k is the real gain in both cases.
     import Modelica_LinearSystems2.StateSpace;
     import Modelica_LinearSystems2.DiscreteStateSpace;
     import Modelica_LinearSystems2.DiscreteZerosAndPoles;
+    import Simulator = DymolaCommands.SimulatorAPI;
 
     input String modelName "Name of the Modelica model"  annotation(Dialog(__Dymola_translatedModel(translate=true)));
     input Real T_linearize = 0
@@ -2558,9 +2570,9 @@ The variable k is the real gain in both cases.
 
     protected
     String fileName2 = fileName + ".mat";
-    Boolean OK1 = simulateModel(problem=modelName, startTime=0, stopTime=T_linearize);
-    Boolean OK2 = importInitial("dsfinal.txt");
-    Boolean OK3 = linearizeModel(problem=modelName, resultFile=fileName, startTime=T_linearize, stopTime=T_linearize + 1);
+    Boolean OK1 = Simulator.simulateModel(problem=modelName, startTime=0, stopTime=T_linearize);
+    Boolean OK2 = Simulator.importInitial("dsfinal.txt");
+    Boolean OK3 = Simulator.linearizeModel(problem=modelName, resultFile=fileName, startTime=T_linearize, stopTime=T_linearize + 1);
     Integer xuy[3] = Modelica_LinearSystems2.Internal.Streams.ReadSystemDimension(fileName2, "ABCD");
     Integer nx = xuy[1];
     Integer nu = xuy[2];
@@ -2626,7 +2638,8 @@ The variable k is the real gain in both cases.
   //       end for;
   //     end for;
 
-   annotation (__Dymola_interactive=true, Documentation(info="<html>
+    annotation (
+      Documentation(info="<html>
 <h4>Syntax</h4>
 <blockquote><pre>
 dzp = DiscreteZerosAndPoles.Import.<b>fromModel</b>(

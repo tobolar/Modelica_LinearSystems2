@@ -822,7 +822,8 @@ ZerosAndPoles zp = p/(p^2 + p + 1)/(p + 1)
 
      end printSystem;
 
-     annotation (__Dymola_interactive=true, Documentation(revisions="<html>
+      annotation (
+        Documentation(revisions="<html>
 <table border=\"1\" cellspacing=\"0\" cellpadding=\"2\">
   <tr>
     <th>Date</th>
@@ -918,7 +919,8 @@ algorithm
           response=Modelica_LinearSystems2.Utilities.Types.TimeResponse.Impulse,
           x0=zeros(Modelica_LinearSystems2.ZerosAndPoles.Analysis.denominatorDegree(zp)));
 
-  annotation(__Dymola_interactive=true, Documentation(info="<html>
+    annotation (
+      Documentation(info="<html>
 <h4>Syntax</h4>
 <blockquote><pre>
 (y, t, x) = ZerosAndPoles.Analysis.<b>impulseResponse</b>(zp, dt, tSpan)
@@ -979,7 +981,8 @@ ZerosAndPoles.Analysis.timeResponse(zp, dt, tSpan, response=Types.TimeResponse.I
           response=Modelica_LinearSystems2.Utilities.Types.TimeResponse.Step,
           x0=zeros(Modelica_LinearSystems2.ZerosAndPoles.Analysis.denominatorDegree(zp)));
 
-  annotation(__Dymola_interactive=true, Documentation(info="<html>
+    annotation (
+      Documentation(info="<html>
 <h4>Syntax</h4>
 <blockquote><pre>
 (y, t, x) = ZerosAndPoles.Analysis.<b>stepResponse</b>(zp, dt, tSpan)
@@ -1041,7 +1044,8 @@ ZerosAndPoles.Analysis.timeResponse(zp, dt, tSpan, response=Types.TimeResponse.S
           response=Modelica_LinearSystems2.Utilities.Types.TimeResponse.Ramp,
           x0=zeros(Modelica_LinearSystems2.ZerosAndPoles.Analysis.denominatorDegree(zp)));
 
-  annotation(__Dymola_interactive=true, Documentation(info="<html>
+    annotation (
+      Documentation(info="<html>
 <h4>Syntax</h4>
 <blockquote><pre>
 (y, t, x) = ZerosAndPoles.Analysis.<b>rampResponse</b>(zp, dt, tSpan)
@@ -1106,7 +1110,8 @@ ZerosAndPoles.Analysis.timeResponse(zp, dt, tSpan, response=Types.TimeResponse.R
           response=Modelica_LinearSystems2.Utilities.Types.TimeResponse.Initial,
           x0=x0);
 
-  annotation(__Dymola_interactive=true, Documentation(info="<html>
+    annotation (
+      Documentation(info="<html>
 <h4>Syntax</h4>
 <blockquote><pre>
 (y, t, x) = ZerosAndPoles.Analysis.<b>initialResponse</b>(zp, dt, tSpan, x0)
@@ -2353,7 +2358,8 @@ is set.
        diagram2.curve :=curves[1:i];
        Plot.diagram(diagram2,device);
 
-     annotation (__Dymola_interactive=true, Documentation(info="<html>
+     annotation (
+       Documentation(info="<html>
 <h4>Syntax</h4>
 <blockquote><pre>
 ZerosAndPoles.Plot.<b>polesAndZeros</b>(zp);
@@ -2553,7 +2559,8 @@ and results in
       end if;
     end if;
 
-    annotation (__Dymola_interactive=true, Documentation(info="<html>
+    annotation (
+      Documentation(info="<html>
 <h4>Syntax</h4>
 <blockquote><pre>
 ZerosAndPoles.Plot.<b>bode</b>(zp)
@@ -2638,7 +2645,8 @@ This function plots the bode-diagram of a transfer function.
     diagram2.curve := {curve};
 
     Plot.diagram(diagram2, device);
-    annotation (__Dymola_interactive=true, Documentation(info="<html>
+    annotation (
+      Documentation(info="<html>
 <h4>Syntax</h4>
 <blockquote><pre>
 ZerosAndPoles.Plot.<b>timeResponse</b>(zp);
@@ -2717,7 +2725,8 @@ This function plots the time response of a transfer function. The character of t
       defaultDiagram=defaultDiagram,
       device=device);
 
-    annotation (__Dymola_interactive=true, Documentation(info="<html>
+    annotation (
+      Documentation(info="<html>
 <h4>Syntax</h4>
 <blockquote><pre>
 ZerosAndPoles.Plot.<b>impulse</b>(zp)
@@ -2782,7 +2791,7 @@ This function plots the impulse response of a zeros-and-poles transfer function.
            + String(zp)));
 
   algorithm
-   Modelica_LinearSystems2.ZerosAndPoles.Plot.timeResponse(
+    Modelica_LinearSystems2.ZerosAndPoles.Plot.timeResponse(
       zp=zp,
       dt=dt,
       tSpan=tSpan,
@@ -2791,9 +2800,8 @@ This function plots the impulse response of a zeros-and-poles transfer function.
       defaultDiagram=defaultDiagram,
       device=device);
 
-  equation
-
-    annotation (__Dymola_interactive=true, Documentation(info="<html>
+    annotation (
+      Documentation(info="<html>
 <h4>Syntax</h4>
 <blockquote><pre>
 ZerosAndPoles.Plot.<b>step</b>(zp)
@@ -2866,7 +2874,8 @@ This function plots the step response of a zeros-and-poles transfer function. It
       defaultDiagram=defaultDiagram,
       device=device);
 
-    annotation (__Dymola_interactive=true, Documentation(info="<html>
+    annotation (
+      Documentation(info="<html>
 <h4>Syntax</h4>
 <blockquote><pre>
 ZerosAndPoles.Plot.<b>ramp</b>(zp)
@@ -2947,7 +2956,8 @@ This function plots the ramp response of a zeros-and-poles transfer function. It
           defaultDiagram=defaultDiagram,
           device=device);
 
-    annotation (__Dymola_interactive=true, Documentation(info="<html>
+    annotation (
+      Documentation(info="<html>
 <h4>Syntax</h4>
 <blockquote><pre>
 ZerosAndPoles.Plot.<b>initialResponse</b>(zp)
@@ -4247,6 +4257,7 @@ Reads and loads a zeros-and-poles transfer function from a mat-file <tt>fileName
       import Modelica_LinearSystems2.StateSpace;
       import Modelica_LinearSystems2.ZerosAndPoles;
       import Modelica_LinearSystems2.Internal.Streams.ReadSystemDimension;
+      import Simulator = DymolaCommands.SimulatorAPI;
 
       input String modelName "Name of the Modelica model" annotation(Dialog(__Dymola_translatedModel(translate=true)));
       input Real T_linearize = 0
@@ -4255,12 +4266,12 @@ Reads and loads a zeros-and-poles transfer function from a mat-file <tt>fileName
 
     protected
       String fileName2 = fileName + ".mat";
-      Boolean OK1 = simulateModel(
+      Boolean OK1 = Simulator.simulateModel(
             problem=modelName,
             startTime=0,
             stopTime=T_linearize);
-      Boolean OK2 = importInitial("dsfinal.txt");
-      Boolean OK3 = linearizeModel(
+      Boolean OK2 = Simulator.importInitial("dsfinal.txt");
+      Boolean OK3 = Simulator.linearizeModel(
             problem=modelName,
             resultFile=fileName,
             startTime=T_linearize,
@@ -4297,7 +4308,7 @@ Reads and loads a zeros-and-poles transfer function from a mat-file <tt>fileName
 
       zp := StateSpace.Conversion.toZerosAndPolesMIMO(result);
 
-    annotation (__Dymola_interactive=true, Documentation(info="<html>
+      annotation (Documentation(info="<html>
 <h4>Syntax</h4>
 <blockquote><pre>
 zp = ZerosAndPoles.Import.<b>fromModel</b>(modelName, T_linearize, fileName)

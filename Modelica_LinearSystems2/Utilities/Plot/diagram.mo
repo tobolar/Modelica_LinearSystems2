@@ -23,23 +23,30 @@ algorithm
                device.diagramWidth,
                diagram.heightRatio*device.diagramWidth}*mmToPixel;
 
-  id:= createPlot(id=-1,
+  id:= DymolaCommands.Plot.createPlot(id=-1,
                   position=integer(position),
+                  y={""},
+                  heading=diagram.heading,
                   erase=true,
                   autoscale=true,
                   autoerase=false,
-                  subPlot=1,
-                  heading=diagram.heading,
                   grid=diagram.grid,
-                  logX=diagram.logX,
-                  logY=diagram.logY,
-                  bottomTitle=diagram.xLabel,
-                  leftTitle=diagram.yLabel,
-                  color=device.autoLineColor,
                   legend=diagram.legend,
+                  legendLocation=Integer(diagram.legendLocation),
                   legendHorizontal=diagram.legendHorizontal,
                   legendFrame=diagram.legendFrame,
-                  legendLocation=Integer(diagram.legendLocation));
+                  logX=diagram.logX,
+                  logY=diagram.logY,
+                  legends={""},
+                  subPlot=1,
+                  leftTitle=diagram.yLabel,
+                  bottomTitle=diagram.xLabel,
+                  colors=fill({-1, -1, -1}, 1),
+                  patterns={LinePattern.Solid},
+                  markers={MarkerStyle.None},
+                  thicknesses={0.25},
+                  axes={1},
+                  displayUnits={""});
 
   for i in 1:nCurves loop
     /*
@@ -60,13 +67,14 @@ algorithm
     */
 
     if diagram.curve[i].autoLine then
-      OK :=plotArray(diagram.curve[i].x,
-                     diagram.curve[i].y,
-                     legend=diagram.curve[i].legend,
-                     id=id,
-                     erase=false);
+      OK := DymolaCommands.Plot.plotArray(
+        diagram.curve[i].x,
+        diagram.curve[i].y,
+        legend=diagram.curve[i].legend,
+        id=id,
+        erase=false);
     else
-      OK := plotArray(
+      OK := DymolaCommands.Plot.plotArray(
         diagram.curve[i].x,
         diagram.curve[i].y,
         legend=diagram.curve[i].legend,
@@ -79,7 +87,8 @@ algorithm
     end if;
   end for;
 
-  annotation (__Dymola_interactive = true, Documentation(info="<html>
+  annotation (
+    Documentation(info="<html>
 <p>
 This function plots a set of 2-dimensional curves in a diagram.
 For an overview, see the documentation of package

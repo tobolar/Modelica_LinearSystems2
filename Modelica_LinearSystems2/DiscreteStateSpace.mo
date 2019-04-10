@@ -1287,7 +1287,7 @@ encapsulated package Analysis
     import Modelica_LinearSystems2.DiscreteStateSpace;
 
     input DiscreteStateSpace dss "Discrete state space system";
-    output Complex eigvalues[size(dss.A, 1)] =
+    output Complex eigvalues[size(dss.A, 1)]=
       Modelica_LinearSystems2.Math.ComplexAdvanced.eigenValues(dss.A)
       "Eigenvalues of the system";
   algorithm
@@ -1497,7 +1497,8 @@ are calculated for each time step t=k*dss.Ts.
           response=Modelica_LinearSystems2.Utilities.Types.TimeResponse.Impulse,
           x0=zeros(size(dss.A, 1)));
 
-    annotation (__Dymola_interactive=true, Documentation(info="<html>
+    annotation (
+      Documentation(info="<html>
 <h4>Syntax</h4>
 <blockquote><pre>
       (y) = DiscreteStateSpace.Analysis.<b>impulseResponse</b>(dss)
@@ -1581,7 +1582,8 @@ the &quot;ImpulseExact&quot; conversion from continuous system to discrete syste
           response=Modelica_LinearSystems2.Utilities.Types.TimeResponse.Step,
           x0=zeros(size(dss.A, 1)));
 
-    annotation (__Dymola_interactive=true, Documentation(info="<html>
+    annotation (
+      Documentation(info="<html>
 <h4>Syntax</h4>
 <blockquote><pre>
       (y) = DiscreteStateSpace.Analysis.<b>stepResponse</b>(dss)
@@ -1668,7 +1670,8 @@ the &quot;StepExact&quot; conversion from continuous system to discrete system.
           response=Modelica_LinearSystems2.Utilities.Types.TimeResponse.Ramp,
           x0=zeros(size(dss.A, 1)));
 
-    annotation (__Dymola_interactive=true, Documentation(info="<html>
+    annotation (
+      Documentation(info="<html>
 <h4>Syntax</h4>
 <blockquote><pre>
       (y) = DiscreteStateSpace.Analysis.<b>rampResponse</b>(dss)
@@ -1759,7 +1762,8 @@ requires the &quot;RampExact&quot; conversion from continuous system to discrete
           response=Modelica_LinearSystems2.Utilities.Types.TimeResponse.Initial,
           x0=x0);
 
-    annotation (__Dymola_interactive=true, Documentation(info="<html>
+    annotation (
+      Documentation(info="<html>
 <h4>Syntax</h4>
 <blockquote><pre>
       (y) = DiscreteStateSpace.Analysis.<b>initialResponse</b>(x0, dss)
@@ -2385,7 +2389,7 @@ algorithm
     defaultDiagram=defaultDiagram,
     device=device);
 
-  annotation (__Dymola_interactive=true, Documentation(info="<html>
+  annotation (Documentation(info="<html>
 <h4>Syntax</h4>
 <blockquote><pre>
 DiscreteStateSpace.Plot.<b>bodeSISO</b>(dss)
@@ -2544,7 +2548,8 @@ algorithm
     end if;
   end for;
 
-  annotation (__Dymola_interactive=true, Documentation(info="<html>
+  annotation (
+    Documentation(info="<html>
 <h4>Syntax</h4>
 <blockquote><pre>
 DiscreteStateSpace.Plot.<b>timeResponse</b>(dss);
@@ -2632,7 +2637,8 @@ end timeResponse;
       defaultDiagram=defaultDiagram,
       device=device);
 
-    annotation (__Dymola_interactive=true, Documentation(info="<html>
+    annotation (
+      Documentation(info="<html>
 <h4>Syntax</h4>
 <blockquote><pre>
 DiscreteStateSpace.Plot.<b>impulse</b>(dss);
@@ -2717,7 +2723,8 @@ This function plots the impulse responses of a state space system for each syste
       defaultDiagram=defaultDiagram,
       device=device);
 
-    annotation (__Dymola_interactive=true, Documentation(info="<html>
+    annotation (
+      Documentation(info="<html>
 <h4>Syntax</h4>
 <blockquote><pre>
 DiscreteStateSpace.Plot.<b>step</b>(dss);
@@ -2801,7 +2808,8 @@ This function plots the discrete step responses of a state space system for each
       defaultDiagram=defaultDiagram,
       device=device);
 
-    annotation (__Dymola_interactive=true, Documentation(info="<html>
+    annotation (
+      Documentation(info="<html>
 <h4>Syntax</h4>
 <blockquote><pre>
 DiscreteStateSpace.Plot.<b>ramp</b>(ss);
@@ -2879,7 +2887,8 @@ algorithm
     defaultDiagram=defaultDiagram,
     device=device);
 
-  annotation (__Dymola_interactive=true, Documentation(info="<html>
+  annotation (
+    Documentation(info="<html>
 <h4>Syntax</h4>
 <blockquote><pre>
 DiscreteStateSpace.Plot.<b>initialResponse</b>(ss);
@@ -3508,6 +3517,7 @@ The file must contain
       import Modelica_LinearSystems2;
       import Modelica_LinearSystems2.StateSpace;
       import Modelica_LinearSystems2.DiscreteStateSpace;
+      import Simulator = DymolaCommands.SimulatorAPI;
 
       input String modelName "Name of the Modelica model"
         annotation (Dialog(__Dymola_translatedModel(translate=true)));
@@ -3519,12 +3529,12 @@ The file must contain
 
     protected
       String fileName2=fileName + ".mat";
-      Boolean OK1=simulateModel(
+      Boolean OK1=Simulator.simulateModel(
       problem=modelName,
       startTime=0,
       stopTime=T_linearize);
-      Boolean OK2=importInitial("dsfinal.txt");
-      Boolean OK3=linearizeModel(
+      Boolean OK2=Simulator.importInitial("dsfinal.txt");
+      Boolean OK3=Simulator.linearizeModel(
       problem=modelName,
       resultFile=fileName,
       startTime=T_linearize,
@@ -3565,8 +3575,8 @@ The file must contain
         Ts=Ts,
         method=method);
 
-      annotation (__Dymola_interactive=true, Documentation(info=
-                                                   "<html>
+      annotation (
+        Documentation(info="<html>
 <h4>Syntax</h4>
 <blockquote><pre>
 dss = DiscreteStateSpace.Import.<b>fromModel</b>(modelName, T_linearize, fileName, Ts, method)
