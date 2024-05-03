@@ -100,7 +100,7 @@ def main(dir, milestone, version, auth):
             break
 
     path = os.path.join(dir, 'Version-{0}'.format(version))
-    os.makedirs(path) #, exist_ok=True)
+    os.makedirs(path, exist_ok=True)
     # Write Markdown
     with open(os.path.join(path, 'ResolvedGitHubIssues.md'), 'w') as f:
         url = 'https://github.com/{0}/{1}/milestone/{2}'.format(owner, repo, milestone)
@@ -121,7 +121,7 @@ def main(dir, milestone, version, auth):
         md = f.read()
 
     # Convert Markdown -> HTML
-    with open(os.path.join(dir, html_template), 'r') as f:
+    with open(os.path.join(dir, html_template), 'r', encoding="utf8") as f:
         template = f.read()
     html = jinja2.Template(template).render(
         content=markdown.markdown(md),
