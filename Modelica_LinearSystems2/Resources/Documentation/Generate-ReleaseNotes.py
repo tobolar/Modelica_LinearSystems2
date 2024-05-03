@@ -20,7 +20,7 @@ import docraptor
 import jinja2
 import markdown
 import requests
-import yaml
+# import yaml
 
 IssueType = IntEnum(
     value='IssueType',
@@ -132,18 +132,18 @@ def main(dir, milestone, version, auth):
     # Convert Markdown -> PDF
     doc_api = docraptor.DocApi()
     doc_api.api_client.configuration.username = os.getenv('DOCRAPTOR_API_KEY', default='YOUR_API_KEY_HERE')
-    try:
-        pdf = doc_api.create_doc({
-            'test': yaml.load(os.getenv('DOCRAPTOR_TEST', default='True'), yaml.SafeLoader),
-            'name': 'ResolvedGitHubIssues.pdf',
-            'document_content': html,
-            'document_type': 'pdf'})
-        with open(os.path.join(path, 'ResolvedGitHubIssues.pdf'), 'wb') as f:
-            f.write(pdf)
-    except docraptor.rest.ApiException as e:
-        print(e.status)
-        print(e.reason)
-        print(e.body)
+    # try:
+    #     pdf = doc_api.create_doc({
+    #         'test': yaml.load(os.getenv('DOCRAPTOR_TEST', default='True'), yaml.SafeLoader),
+    #         'name': 'ResolvedGitHubIssues.pdf',
+    #         'document_content': html,
+    #         'document_type': 'pdf'})
+    #     with open(os.path.join(path, 'ResolvedGitHubIssues.pdf'), 'wb') as f:
+    #         f.write(pdf)
+    # except docraptor.rest.ApiException as e:
+    #     print(e.status)
+    #     print(e.reason)
+    #     print(e.body)
 
 
 if __name__ == '__main__':
