@@ -63,7 +63,8 @@ def _tidyFileHTML(file_name):
                     in_line = i
                 elif tag == '/html':
                     if in_line != i:
-                        del doc[-1]
+                        if len(doc) > 0:
+                            del doc[-1]
                         cont = line[:match.start()]
                     else:
                         # Single line
