@@ -490,15 +490,15 @@ same := ss1 == ss2;
     Integer nx=size(ss.A, 1);
     Integer nu=size(ss.B, 2);
     Integer ny=size(ss.C, 1);
-    Integer sizeD=size(ss.D, 2);
     Integer stringMaxLength;
     Boolean xNamesExist=false;
     Boolean uNamesExist=false;
     Boolean yNamesExist=false;
+    Integer spc = 11 "Fixed length of space";
 
   algorithm
     // If system is too large, do not print the matrices
-    if size(ss.A,1) > 50 or size(ss.B, 2) > 50 or size(ss.C, 1) > 50 then
+    if nx > 50 or nu > 50 or ny > 50 then
       s := "System not printed since too large (only dimensions):\n" +
            "   " + name + ".A[" + String(nx) + "," + String(nx) + "]\n" +
            "   " + name + ".B[" + String(nx) + "," + String(nu) + "]\n" +
@@ -507,17 +507,24 @@ same := ss1 == ss2;
       return;
     end if;
 
+    // Short print if empty matrices
+    if nx == 0 and nu == 0 then
+      s := name + ".A = []\n  " + name + ".B = []\n   " + name +
+        ".C = [] \n   " + name + ".D = []";
+      return;
+    end if;
+
     //Checking if name arrays are empty
     for i in 1:nx loop
-      xNamesExist := xNamesExist or (ss.xNames[i] <> "");
+      xNamesExist := xNamesExist or not Strings.isEmpty(ss.xNames[i]);
     end for;
 
     for i in 1:ny loop
-      yNamesExist := yNamesExist or (ss.yNames[i] <> "");
+      yNamesExist := yNamesExist or not Strings.isEmpty(ss.yNames[i]);
     end for;
 
     for i in 1:nu loop
-      uNamesExist := uNamesExist or (ss.uNames[i] <> "");
+      uNamesExist := uNamesExist or not Strings.isEmpty(ss.uNames[i]);
     end for;
     /*
     if xNamesExist then
@@ -528,237 +535,195 @@ same := ss1 == ss2;
 */
     stringMaxLength := max(size(ss.xNames, 1), min(size(ss.yNames, 1), 11));
 
-    if nx == 0 and sizeD == 0 then
-      s := name + ".A = []\n  " + name + ".B = []\n   " + name +
-        ".C = [] \n   " + name + ".D = []";
+    // ----- Write matrix A ---------------------------------------------------------------------------
+
+    s := "\n" + name + ".A = \n";
+
+    //Horizontal
+    // Two alternatives when printing state names
+    if xNamesExist then
+      s := s + Strings.repeat(spc + significantDigits - min(Strings.length(ss.xNames[1]), spc))
+        + Strings.repeat(min(Strings.length(ss.xNames[1]), spc)) + " "
+        + Strings.substring(ss.xNames[1], 1, min(Strings.length(ss.xNames[1]), spc));
     else
-      s := "\n" + name + ".A = \n";
-
-      //Horizontal
-      // Two alternatives when printing state names
-      if xNamesExist == false then
-        s := s + Strings.repeat(stringMaxLength + significantDigits - 1) +
-          "x1 ";
-      else
-        s := s + Strings.repeat(11 + significantDigits - min(Strings.length(ss.xNames[
-          1]), 11)) + Strings.repeat(min(Strings.length(ss.xNames[1]), 11)) +
-          " " + Strings.substring(
-            ss.xNames[1],
-            1,
-            min(Strings.length(ss.xNames[1]), 11));
-      end if;
-
-      for i in 2:nx loop
-
-        //Two alternatives when printing state names
-
-        if xNamesExist == false then
-          s := s + Strings.repeat(significantDigits + 11 - Strings.length("x"
-             + String(i - 1))) + "x" + String(i) + " ";
-        else
-          s := s + " " + Strings.repeat(significantDigits + 11 - min(
-            Strings.length(ss.xNames[i - 1]), 11)) + Strings.substring(
-              ss.xNames[i],
-              1,
-              min(Strings.length(ss.xNames[i]), 11));
-
-        end if;
-
-        //s := s + Strings.repeat(6) + "x" + String(i);
-      end for;
-      s := s + "\n";
-
-      for i in 1:nx loop
-        //Vertical
-        //Two alternatives when printing state names
-        if xNamesExist == false then
-          s := s + space + "x" + String(i) + " ";
-        else
-          s := s + Strings.repeat(significantDigits + 11 - min(Strings.length(
-            ss.xNames[i]), 11)) + Strings.substring(
-              ss.xNames[i],
-              1,
-              min(Strings.length(ss.xNames[i]), 11)) + " ";
-        end if;
-
-        for j in 1:nx loop
-          if ss.A[i, j] >= 0 then
-            s := s + " ";
-          end if;
-          s := s + String(ss.A[i, j], significantDigits=significantDigits) +
-            Strings.repeat(significantDigits + 11 - Strings.length(String(abs(
-            ss.A[i, j]), significantDigits=significantDigits)));
-        end for;
-        s := s + "\n";
-      end for;
-      //--------------------------------------------------------------------------------------------------------------------------------------------------
-      s := s + "\n" + name + ".B = \n";
-      //Horizontal
-      // Two alternatives when printing state names
-      if uNamesExist == false then
-        s := s + Strings.repeat(stringMaxLength + significantDigits - 1) +
-          "u1 ";
-      else
-        s := s + Strings.repeat(11 + significantDigits - min(Strings.length(ss.uNames[
-          1]), 11)) + Strings.repeat(min(Strings.length(ss.uNames[1]), 11)) +
-          " " + Strings.substring(
-            ss.uNames[1],
-            1,
-            min(Strings.length(ss.uNames[1]), 11));
-      end if;
-
-      for i in 2:nu loop
-        //Two alternatives when printing state names
-        if uNamesExist == false then
-          s := s + Strings.repeat(significantDigits + 11 - Strings.length("u"
-             + String(i - 1))) + "u" + String(i) + " ";
-        else
-          s := s + " " + Strings.repeat(significantDigits + 11 - min(
-            Strings.length(ss.uNames[i - 1]), 11)) + Strings.substring(
-              ss.uNames[i],
-              1,
-              min(Strings.length(ss.uNames[i]), 11));
-        end if;
-      end for;
-      s := s + "\n";
-      //s := s + Strings.repeat(6) + "x" + String(i);
-      for i in 1:nx loop
-
-        //Vertical
-        //Two alternatives when printing state names
-        if xNamesExist == false then
-          s := s + space + "x" + String(i) + " ";
-        else
-
-          s := s + Strings.repeat(significantDigits + 11 - min(Strings.length(
-            ss.xNames[i]), 11)) + Strings.substring(
-              ss.xNames[i],
-              1,
-              min(Strings.length(ss.xNames[i]), 11)) + " ";
-        end if;
-
-        for j in 1:nu loop
-          if ss.B[i, j] >= 0 then
-            s := s + " ";
-          end if;
-          s := s + String(ss.B[i, j], significantDigits=significantDigits) +
-            Strings.repeat(significantDigits + 11 - Strings.length(String(abs(
-            ss.B[i, j]), significantDigits=significantDigits)));
-        end for;
-        s := s + "\n";
-      end for;
-
-      //--------------------------------------------------------------------------------------------------------------------------------------------------
-      s := s + "\n" + name + ".C = \n";
-      //Horizontal
-      // Two alternatives when printing state names
-      if xNamesExist == false then
-        s := s + Strings.repeat(stringMaxLength + significantDigits - 1) +
-          "x1 ";
-      else
-        s := s + Strings.repeat(11 + significantDigits - min(Strings.length(ss.xNames[
-          1]), 11)) + Strings.repeat(min(Strings.length(ss.xNames[1]), 11)) +
-          " " + Strings.substring(
-            ss.xNames[1],
-            1,
-            min(Strings.length(ss.xNames[1]), 11));
-      end if;
-
-      for i in 2:nx loop
-        //Two alternatives when printing state names
-        if xNamesExist == false then
-          s := s + Strings.repeat(significantDigits + 11 - Strings.length("x"
-             + String(i - 1))) + "x" + String(i) + " ";
-        else
-          s := s + " " + Strings.repeat(significantDigits + 11 - min(
-            Strings.length(ss.xNames[i - 1]), 11)) + Strings.substring(
-              ss.xNames[i],
-              1,
-              min(Strings.length(ss.xNames[i]), 11));
-        end if;
-      end for;
-      s := s + "\n";
-      //s := s + Strings.repeat(6) + "x" + String(i);
-
-      for i in 1:ny loop
-        //Vertical
-        //Two alternatives when printing state names
-        if yNamesExist == false then
-          s := s + space + "y" + String(i) + " ";
-        else
-          s := s + Strings.repeat(significantDigits + 11 - min(Strings.length(
-            ss.yNames[i]), 11)) + Strings.substring(
-              ss.yNames[i],
-              1,
-              min(Strings.length(ss.yNames[i]), 11)) + " ";
-
-        end if;
-
-        for j in 1:nx loop
-          if ss.C[i, j] >= 0 then
-            s := s + " ";
-          end if;
-          s := s + String(ss.C[i, j], significantDigits=significantDigits) +
-            Strings.repeat(significantDigits + 11 - Strings.length(String(abs(
-            ss.C[i, j]), significantDigits=significantDigits)));
-        end for;
-        s := s + "\n";
-      end for;
-      //--------------------------------------------------------------------------------------------------------------------------------------------------
-      s := s + "\n" + name + ".D = \n";
-      //Horizontal
-      // Two alternatives when printing state names
-      if uNamesExist == false then
-        s := s + Strings.repeat(stringMaxLength + significantDigits - 1) +
-          "u1 ";
-      else
-        s := s + Strings.repeat(11 + significantDigits - min(Strings.length(ss.uNames[
-          1]), 11)) + Strings.repeat(min(Strings.length(ss.uNames[1]), 11)) +
-          " " + Strings.substring(
-            ss.uNames[1],
-            1,
-            min(Strings.length(ss.uNames[1]), 11));
-      end if;
-
-      for i in 2:nu loop
-        //Two alternatives when printing state names
-        if uNamesExist == false then
-          s := s + Strings.repeat(significantDigits + 11 - Strings.length("u"
-             + String(i - 1))) + "u" + String(i) + " ";
-        else
-          s := s + " " + Strings.repeat(significantDigits + 11 - min(
-            Strings.length(ss.uNames[i - 1]), 11)) + Strings.substring(
-              ss.uNames[i],
-              1,
-              min(Strings.length(ss.uNames[i]), 11));
-        end if;
-      end for;
-      s := s + "\n";
-      for i in 1:ny loop
-        //Vertical
-        //Two alternatives when printing state names
-        if yNamesExist == false then
-          s := s + space + "y" + String(i) + " ";
-        else
-          s := s + Strings.repeat(significantDigits + 11 - min(Strings.length(
-            ss.yNames[i]), 11)) + Strings.substring(
-              ss.yNames[i],
-              1,
-              min(Strings.length(ss.yNames[i]), 11)) + " ";
-        end if;
-
-        for j in 1:nu loop
-          if ss.D[i, j] >= 0 then
-            s := s + " ";
-          end if;
-          s := s + String(ss.D[i, j], significantDigits=significantDigits) +
-            Strings.repeat(significantDigits + 11 - Strings.length(String(abs(
-            ss.D[i, j]), significantDigits=significantDigits)));
-        end for;
-        s := s + "\n";
-      end for;
-
+      s := s + Strings.repeat(stringMaxLength + significantDigits - 1) + "x1 ";
     end if;
+
+    for i in 2:nx loop
+
+      //Two alternatives when printing state names
+
+      if xNamesExist then
+        s := s + " " + Strings.repeat(significantDigits + spc - min(Strings.length(ss.xNames[i - 1]), spc))
+          + Strings.substring(ss.xNames[i], 1, min(Strings.length(ss.xNames[i]), spc));
+      else
+        s := s + Strings.repeat(significantDigits + spc - Strings.length("x" + String(i - 1)))
+          + "x" + String(i) + " ";
+      end if;
+
+      //s := s + Strings.repeat(6) + "x" + String(i);
+    end for;
+    s := s + "\n";
+
+    for i in 1:nx loop
+      //Vertical
+      //Two alternatives when printing state names
+      if xNamesExist then
+        s := s + Strings.repeat(significantDigits + spc - min(Strings.length(ss.xNames[i]), spc))
+          + Strings.substring(ss.xNames[i], 1, min(Strings.length(ss.xNames[i]), spc)) + " ";
+      else
+        s := s + space + "x" + String(i) + " ";
+      end if;
+
+      for j in 1:nx loop
+        if ss.A[i, j] >= 0 then
+          s := s + " ";
+        end if;
+        s := s + String(ss.A[i, j], significantDigits=significantDigits)
+          + Strings.repeat(significantDigits + spc
+            - Strings.length(String(abs(ss.A[i, j]), significantDigits=significantDigits)));
+      end for;
+      s := s + "\n";
+    end for;
+
+    // ----- Write matrix B ---------------------------------------------------------------------------
+
+    s := s + "\n" + name + ".B = \n";
+    //Horizontal
+    // Two alternatives when printing state names
+    if uNamesExist then
+      s := s + Strings.repeat(spc + significantDigits - min(Strings.length(ss.uNames[1]), spc))
+        + Strings.repeat(min(Strings.length(ss.uNames[1]), spc)) + " "
+        + Strings.substring(ss.uNames[1], 1, min(Strings.length(ss.uNames[1]), spc));
+    else
+      s := s + Strings.repeat(stringMaxLength + significantDigits - 1) + "u1 ";
+    end if;
+
+    for i in 2:nu loop
+      //Two alternatives when printing state names
+      if uNamesExist then
+        s := s + " " + Strings.repeat(significantDigits + spc - min(Strings.length(ss.uNames[i - 1]), spc))
+          + Strings.substring(ss.uNames[i], 1, min(Strings.length(ss.uNames[i]), spc));
+      else
+        s := s + Strings.repeat(significantDigits + spc - Strings.length("u" + String(i - 1)))
+          + "u" + String(i) + " ";
+      end if;
+    end for;
+    s := s + "\n";
+    //s := s + Strings.repeat(6) + "x" + String(i);
+    for i in 1:nx loop
+
+      //Vertical
+      //Two alternatives when printing state names
+      if xNamesExist then
+        s := s + Strings.repeat(significantDigits + spc - min(Strings.length(ss.xNames[i]), spc))
+          + Strings.substring(ss.xNames[i], 1, min(Strings.length(ss.xNames[i]), spc)) + " ";
+      else
+        s := s + space + "x" + String(i) + " ";
+      end if;
+
+      for j in 1:nu loop
+        if ss.B[i, j] >= 0 then
+          s := s + " ";
+        end if;
+        s := s + String(ss.B[i, j], significantDigits=significantDigits)
+          + Strings.repeat(significantDigits + spc
+            - Strings.length(String(abs(ss.B[i, j]), significantDigits=significantDigits)));
+      end for;
+      s := s + "\n";
+    end for;
+
+    // ----- Write matrix C ---------------------------------------------------------------------------
+
+    s := s + "\n" + name + ".C = \n";
+    //Horizontal
+    // Two alternatives when printing state names
+    if xNamesExist then
+      s := s + Strings.repeat(spc + significantDigits - min(Strings.length(ss.xNames[1]), spc))
+        + Strings.repeat(min(Strings.length(ss.xNames[1]), spc)) +" "
+        + Strings.substring(ss.xNames[1], 1, min(Strings.length(ss.xNames[1]), spc));
+    else
+      s := s + Strings.repeat(stringMaxLength + significantDigits - 1) + "x1 ";
+    end if;
+
+    for i in 2:nx loop
+      //Two alternatives when printing state names
+      if xNamesExist then
+        s := s + " " + Strings.repeat(significantDigits + spc - min(Strings.length(ss.xNames[i - 1]), spc))
+          + Strings.substring(ss.xNames[i], 1, min(Strings.length(ss.xNames[i]), spc));
+      else
+        s := s + Strings.repeat(significantDigits + spc - Strings.length("x" + String(i - 1)))
+          + "x" + String(i) + " ";
+      end if;
+    end for;
+    s := s + "\n";
+    //s := s + Strings.repeat(6) + "x" + String(i);
+
+    for i in 1:ny loop
+      //Vertical
+      //Two alternatives when printing state names
+      if yNamesExist then
+        s := s + Strings.repeat(significantDigits + spc - min(Strings.length(ss.yNames[i]), spc))
+          + Strings.substring(ss.yNames[i], 1, min(Strings.length(ss.yNames[i]), spc)) + " ";
+      else
+        s := s + space + "y" + String(i) + " ";
+      end if;
+
+      for j in 1:nx loop
+        if ss.C[i, j] >= 0 then
+          s := s + " ";
+        end if;
+        s := s + String(ss.C[i, j], significantDigits=significantDigits)
+          + Strings.repeat(significantDigits + spc
+            - Strings.length(String(abs(ss.C[i, j]), significantDigits=significantDigits)));
+      end for;
+      s := s + "\n";
+    end for;
+
+    // ----- Write matrix D ---------------------------------------------------------------------------
+
+    s := s + "\n" + name + ".D = \n";
+    //Horizontal
+    // Two alternatives when printing state names
+    if uNamesExist then
+      s := s + Strings.repeat(spc + significantDigits - min(Strings.length(ss.uNames[1]), spc))
+        + Strings.repeat(min(Strings.length(ss.uNames[1]), spc)) + " "
+        + Strings.substring(ss.uNames[1], 1, min(Strings.length(ss.uNames[1]), spc));
+    else
+      s := s + Strings.repeat(stringMaxLength + significantDigits - 1) + "u1 ";
+    end if;
+
+    for i in 2:nu loop
+      //Two alternatives when printing state names
+      if uNamesExist then
+        s := s + " " + Strings.repeat(significantDigits + spc - min(Strings.length(ss.uNames[i - 1]), spc))
+          + Strings.substring(ss.uNames[i], 1, min(Strings.length(ss.uNames[i]), spc));
+      else
+        s := s + Strings.repeat(significantDigits + spc - Strings.length("u" + String(i - 1)))
+          + "u" + String(i) + " ";
+      end if;
+    end for;
+    s := s + "\n";
+    for i in 1:ny loop
+      //Vertical
+      //Two alternatives when printing state names
+      if yNamesExist then
+        s := s + Strings.repeat(significantDigits + spc - min(Strings.length(ss.yNames[i]), spc))
+          + Strings.substring(ss.yNames[i], 1, min(Strings.length(ss.yNames[i]), spc)) + " ";
+      else
+        s := s + space + "y" + String(i) + " ";
+      end if;
+
+      for j in 1:nu loop
+        if ss.D[i, j] >= 0 then
+          s := s + " ";
+        end if;
+        s := s + String(ss.D[i, j], significantDigits=significantDigits)
+          + Strings.repeat(significantDigits + spc
+            - Strings.length(String(abs(ss.D[i, j]), significantDigits=significantDigits)));
+      end for;
+      s := s + "\n";
+    end for;
 
     annotation (Documentation(info="<html>
 <p>
@@ -4103,7 +4068,7 @@ Function StateSpace.Analysis.<strong>isControllable</strong> checks the controll
       <td> | </td>
     </tr>
     <tr>
-      <td>   </td>
+      <td> <strong>H</strong> = </td>
       <td> | </td>
       <td style=\"text-align:center;\"> 0 </td>
       <td style=\"text-align:center;\"> <strong>H</strong>32 </td>
@@ -4113,7 +4078,7 @@ Function StateSpace.Analysis.<strong>isControllable</strong> checks the controll
       <td> | </td>
     </tr>
     <tr>
-      <td> <strong>H</strong> = </td>
+      <td>   </td>
       <td> | </td>
       <td style=\"text-align:center;\"> &vellip; </td>
       <td style=\"text-align:center;\"> &dtdot; </td>
