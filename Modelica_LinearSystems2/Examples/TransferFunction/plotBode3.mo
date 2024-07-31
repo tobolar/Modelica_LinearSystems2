@@ -19,11 +19,9 @@ algorithm
 <p>
 Construct a&nbsp;transfer function
 </p>
-<blockquote><pre>
-     1
------------
- (<var>s</var><sup>2</sup> + 1)
-</pre></blockquote>
+<blockquote>
+tf = 1 / (<var>s</var><sup>2</sup> + 1)
+</blockquote>
 <p>
 from numerator and denominator array and plot the Bode diagram with automatic determination
 of the frequency range to plot.
