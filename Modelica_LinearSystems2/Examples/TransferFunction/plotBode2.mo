@@ -29,19 +29,15 @@ algorithm
 <p>
 Construct transfer functions
 </p>
-<blockquote><pre>
-      <var>s</var> + 2
-----------------
- 2*<var>s</var><sup>2</sup> + 3*<var>s</var> + 4
-</pre></blockquote>
+<blockquote>
+tf<sub>1</sub> = (<var>s</var> + 2) / (2*<var>s</var><sup>2</sup> + 3*<var>s</var> + 4)
+</blockquote>
 <p>
 and
 </p>
-<blockquote><pre>
-     <var>s</var> + 2
---------------
- 4*<var>s</var><sup>2</sup> + <var>s</var> + 4
-</pre></blockquote>
+<blockquote>
+tf<sub>2</sub> = (<var>s</var> + 2) / (4*<var>s</var><sup>2</sup> + <var>s</var> + 4)
+</blockquote>
 <p>
 from numerator and denominator arrays and plot their Bode diagram with automatic determination
 of the frequency range to plot.

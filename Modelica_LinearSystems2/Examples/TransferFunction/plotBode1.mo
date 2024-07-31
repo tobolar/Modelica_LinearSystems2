@@ -25,19 +25,15 @@ algorithm
 <p>
 Construct transfer functions
 </p>
-<blockquote><pre>
-      1
--------------
- (10*<var>s</var> + 1)<sup>3</sup>
-</pre></blockquote>
+<blockquote>
+tf<sub>1</sub> = 1 / (10*<var>s</var> + 1)<sup>3</sup>
+</blockquote>
 <p>
 and
 </p>
-<blockquote><pre>
-      <var>s</var> + 2
-----------------
- 2*<var>s</var><sup>2</sup> + 3*<var>s</var> + 4
-</pre></blockquote>
+<blockquote>
+tf<sub>2</sub> = (<var>s</var> + 2) / (2*<var>s</var><sup>2</sup> + 3*<var>s</var> + 4)
+</blockquote>
 <p>
 and plot their Bode diagram with automatic determination of the frequency range to plot.
 </p>
