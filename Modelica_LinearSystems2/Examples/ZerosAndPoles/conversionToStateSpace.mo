@@ -12,7 +12,7 @@ function conversionToStateSpace
 
 protected
   StateSpace ss1=ZerosAndPoles.Conversion.toStateSpace(zpi);      //explicit conversion
-  StateSpace ss2=StateSpace(zpi);                                 //short conversion using overloadig
+  StateSpace ss2=StateSpace(zpi);                                 //short conversion using overloading
   ZerosAndPoles zpo1=StateSpace.Conversion.toZerosAndPoles(ss1);  //explicit conversion
 
 algorithm
