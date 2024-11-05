@@ -32,7 +32,9 @@ numberOfRealZeros
 printComplexVector
 reorderEigenvalue
 reorderZeros
+simulateAndLinearizeModel
 sortEigenvalue
+stateSpaceOfModel
 timeResponseMask
 timeResponseMask2
 timeResponseMask2_tf
