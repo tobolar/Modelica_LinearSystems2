@@ -2466,40 +2466,24 @@ second column respectively. The variable k is the real gain in both cases.
     function fromModel
       "Generate a DiscreteZerosAndPoles data record from a state space representation resulted from linearization of a model"
 
-      import Modelica;
-      import DymolaCommands;
-      import Simulator = DymolaCommands.SimulatorAPI;
       import Modelica_LinearSystems2;
       import Modelica_LinearSystems2.StateSpace;
       import Modelica_LinearSystems2.DiscreteStateSpace;
       import Modelica_LinearSystems2.DiscreteZerosAndPoles;
 
       input String modelName "Name of the Modelica model" annotation(Dialog(__Dymola_translatedModel(translate=true)));
-      input Real T_linearize=0
-        "Point in time of simulation to linearize the model";
+      input Real T_linearize=0 "Point in time of simulation to linearize the model";
       input String fileName="dslin" "Name of the result file";
       input Modelica.Units.SI.Time Ts=1 "Sample time";
       input Modelica_LinearSystems2.Utilities.Types.Method method=Modelica_LinearSystems2.Utilities.Types.Method.Trapezoidal "Discretization method";
 
     protected
-      String fileName2 = fileName + ".mat";
-      Boolean OK1 = Simulator.simulateModel(problem=modelName, startTime=0, stopTime=T_linearize);
-      Boolean OK2 = Simulator.importInitial("dsfinal.txt");
-      Boolean OK3 = Simulator.linearizeModel(problem=modelName, resultFile=fileName, startTime=T_linearize, stopTime=T_linearize + 1);
-      Integer xuy[3]=Modelica_LinearSystems2.Utilities.Streams.readSystemDimension(fileName2, "ABCD");
-      Integer nx = xuy[1];
-      Integer nu = xuy[2];
-      Integer ny = xuy[3];
-      Real ABCD[nx + ny,nx + nu]=Modelica.Utilities.Streams.readRealMatrix(
-        fileName2, "ABCD", nx + ny, nx + nu);
-      String xuyName[nx + nu + ny]=DymolaCommands.MatrixIO.readStringMatrix(
-        fileName2, "xuyName", nx + nu + ny);
-
-      StateSpace ss(
-        redeclare Real A[nx,nx],
-        redeclare Real B[nx,nu],
-        redeclare Real C[ny,nx],
-        redeclare Real D[ny,nu]) "= model linearized at initial point";
+      StateSpace ss=
+        Modelica_LinearSystems2.Internal.stateSpaceOfModel(modelName, T_linearize, T_linearize+1, fileName)
+        "= model linearized at initial point";
+      Integer nx = size(ss.A,1);
+      Integer nu = size(ss.B,2);
+      Integer ny = size(ss.C,1);
       DiscreteStateSpace dss(
         redeclare Real A[nx,nx],
         redeclare Real B[nx,nu],
@@ -2513,21 +2497,13 @@ second column respectively. The variable k is the real gain in both cases.
         redeclare Real D[1,1],
         redeclare Real B2[nx,1]) "= model linearized at initial point";
 
-        DiscreteZerosAndPoles dummy;
+      // DiscreteZerosAndPoles dummy;
 
     public
       output DiscreteZerosAndPoles dzp[:,:];//=fill(dummy,ny,nu);
+
     algorithm
-      ss.A := ABCD[1:nx, 1:nx];
-      ss.B := ABCD[1:nx, nx + 1:nx + nu];
-      ss.C := ABCD[nx + 1:nx + ny, 1:nx];
-      ss.D := ABCD[nx + 1:nx + ny, nx + 1:nx + nu];
-      ss.uNames := xuyName[nx + 1:nx + nu];
-      ss.yNames := xuyName[nx + nu + 1:nx + nu + ny];
-      ss.xNames := xuyName[1:nx];
-
       dss := DiscreteStateSpace(ss, Ts=Ts, method=method);
-
       dzp := DiscreteStateSpace.Conversion.toDiscreteZerosAndPolesMIMO(dss);
 
     //   for ic in 1:ny loop
