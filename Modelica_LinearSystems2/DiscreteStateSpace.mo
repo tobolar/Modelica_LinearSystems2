@@ -3515,12 +3515,7 @@ The file must contain
     function fromModel
       "Generate a DiscreteStateSpace data record by linearization of a Modelica model"
 
-      import Modelica;
-      import DymolaCommands;
-      import Simulator = DymolaCommands.SimulatorAPI;
       import Modelica_LinearSystems2;
-      import Modelica_LinearSystems2.StateSpace;
-      import Modelica_LinearSystems2.DiscreteStateSpace;
 
       input String modelName "Name of the Modelica model"
         annotation (Dialog(__Dymola_translatedModel(translate=true)));
@@ -3531,40 +3526,14 @@ The file must contain
       input Modelica_LinearSystems2.Utilities.Types.Method method=Modelica_LinearSystems2.Utilities.Types.Method.Trapezoidal "Discretization method";
 
     protected
-      String fileName2 = fileName + ".mat";
-      Boolean OK1 = Simulator.simulateModel(
-      problem=modelName,
-      startTime=0,
-      stopTime=T_linearize);
-      Boolean OK2 = Simulator.importInitial("dsfinal.txt");
-      Boolean OK3 = Simulator.linearizeModel(
-      problem=modelName,
-      resultFile=fileName,
-      startTime=T_linearize,
-      stopTime=T_linearize + 3*Ts);
-
-      Integer xuy[3]=Modelica_LinearSystems2.Utilities.Streams.readSystemDimension(fileName2, "ABCD");
-      Integer nx = xuy[1];
-      Integer nu = xuy[2];
-      Integer ny = xuy[3];
-
-      Real ABCD[nx + ny,nx + nu]=Modelica.Utilities.Streams.readRealMatrix(
-        fileName2,
-        "ABCD",
-        nx + ny,
-        nx + nu);
-      String xuyName[nx + nu + ny]=DymolaCommands.MatrixIO.readStringMatrix(
-        fileName2,
-        "xuyName",
-        nx + nu + ny);
-
-      StateSpace ss(
-        redeclare Real A[nx,nx],
-        redeclare Real B[nx,nu],
-        redeclare Real C[ny,nx],
-        redeclare Real D[ny,nu]) "System model linearized at initial point";
+      Modelica_LinearSystems2.StateSpace ss=
+        Modelica_LinearSystems2.Internal.stateSpaceOfModel(modelName, T_linearize, T_linearize+3*Ts, fileName)
+        "= model linearized at initial point";
+      Integer nx = size(ss.A,1);
+      Integer nu = size(ss.B,2);
+      Integer ny = size(ss.C,1);
     public
-      output DiscreteStateSpace result(
+      output Modelica_LinearSystems2.DiscreteStateSpace result(
         redeclare Real A[nx,nx],
         redeclare Real B[nx,nu],
         redeclare Real B2[nx,nu],
@@ -3572,15 +3541,7 @@ The file must contain
         redeclare Real D[ny,nu]) "State space description of model linearized at initial point";
 
     algorithm
-      ss.A := ABCD[1:nx, 1:nx];
-      ss.B := ABCD[1:nx, nx + 1:nx + nu];
-      ss.C := ABCD[nx + 1:nx + ny, 1:nx];
-      ss.D := ABCD[nx + 1:nx + ny, nx + 1:nx + nu];
-      ss.uNames := xuyName[nx + 1:nx + nu];
-      ss.yNames := xuyName[nx + nu + 1:nx + nu + ny];
-      ss.xNames := xuyName[1:nx];
-
-      result := DiscreteStateSpace(
+      result := Modelica_LinearSystems2.DiscreteStateSpace(
         ss=ss,
         Ts=Ts,
         method=method);
