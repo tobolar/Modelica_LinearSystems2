@@ -2530,49 +2530,20 @@ Reads and loads a transfer function from a mat-file <tt>fileName</tt>. The file 
     function fromModel
       "Generate a TransferFunction data record from a state space representation resulted from linearization of a model"
 
-      import Modelica;
-      import DymolaCommands;
-      import Simulator = DymolaCommands.SimulatorAPI;
       import Modelica_LinearSystems2;
-      import Modelica_LinearSystems2.StateSpace;
-      import Modelica_LinearSystems2.TransferFunction;
 
       input String modelName "Name of the Modelica model" annotation(Dialog(__Dymola_translatedModel(translate=true)));
       input Real T_linearize=0 "Point in time of simulation to linearize the model";
       input String fileName="dslin" "Name of the result file";
 
     protected
-      String fileName2 = fileName + ".mat";
-      Boolean OK1 = Simulator.simulateModel(problem=modelName, startTime=0, stopTime=T_linearize);
-      Boolean OK2 = Simulator.importInitial("dsfinal.txt");
-      Boolean OK3 = Simulator.linearizeModel(problem=modelName, resultFile=fileName, startTime=T_linearize, stopTime=T_linearize+1);
-      Integer xuy[3]=Modelica_LinearSystems2.Utilities.Streams.readSystemDimension(
-        fileName2, "ABCD");
-      Integer nx = xuy[1];
-      Integer nu = xuy[2];
-      Integer ny = xuy[3];
-      Real ABCD[nx + ny,nx + nu]=Modelica.Utilities.Streams.readRealMatrix(
-        fileName2, "ABCD", nx + ny, nx + nu);
-      String xuyName[nx + nu + ny]=DymolaCommands.MatrixIO.readStringMatrix(
-        fileName2, "xuyName", nx + nu + ny);
-
-      StateSpace result(
-        redeclare Real A[nx,nx],
-        redeclare Real B[nx,nu],
-        redeclare Real C[ny,nx],
-        redeclare Real D[ny,nu]) "= model linearized at initial point";
+      Modelica_LinearSystems2.StateSpace result=
+        Modelica_LinearSystems2.Internal.stateSpaceOfModel(modelName, T_linearize, T_linearize+1, fileName)
+        "= model linearized at initial point";
     public
-      output TransferFunction tf[:,:];
+      output Modelica_LinearSystems2.TransferFunction tf[:,:];
 
     algorithm
-      result.A := ABCD[1:nx, 1:nx];
-      result.B := ABCD[1:nx, nx + 1:nx + nu];
-      result.C := ABCD[nx + 1:nx + ny, 1:nx];
-      result.D := ABCD[nx + 1:nx + ny, nx + 1:nx + nu];
-      result.uNames := xuyName[nx + 1:nx + nu];
-      result.yNames := xuyName[nx + nu + 1:nx + nu + ny];
-      result.xNames := xuyName[1:nx];
-
       tf := Modelica_LinearSystems2.StateSpace.Conversion.toTransferFunctionMIMO(result);
 
       annotation (__Dymola_interactive=true, Documentation(info="<html>
